@@ -8,3 +8,8 @@ bob:
     username: bob
     email: bob@bob.com
     password_digest: <%= User.digest('P@ssWord') %>
+    
+jeff:
+    username: jeff
+    email: jeff@bob.com
+    password_digest: <%= User.digest('P@ssWord') %>

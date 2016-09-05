@@ -7,8 +7,13 @@ Rails.application.routes.draw do
   
   root 'sessions#new'
 
-  resources :users
+  resources :users do
+	member do
+		get :following, :followers
+	end
+  end
   resources :tweets, only: [:create, :destroy]
+  resources :follows, only: [:create, :destroy]
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

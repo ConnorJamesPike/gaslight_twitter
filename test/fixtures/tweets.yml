@@ -24,3 +24,13 @@ five:
   content: "NOW!"
   created_at: <%= Time.zone.now %>
   user: preloaded
+
+six:
+  content: "I'm bob"
+  created_at: <%= 10.minutes.ago %>
+  user: bob
+  
+seven:
+  content: "Im jeff"
+  created_at: <%= 10.minutes.ago %>
+  user: jeff

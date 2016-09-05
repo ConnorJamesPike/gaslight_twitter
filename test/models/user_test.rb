@@ -115,4 +115,39 @@ class UserTest < ActiveSupport::TestCase
 	@user.save
 	assert_not !!@user.authenticate("blahblah")
   end
+  
+  test "follow and unfollow" do
+	preloaded = users(:preloaded)
+	bob = users(:bob)
+	assert_not preloaded.following?(bob)
+	preloaded.follow(bob)
+	assert preloaded.following?(bob)
+	assert bob.followers.include?(preloaded)
+	preloaded.unfollow(bob)
+	assert_not preloaded.following?(bob)
+  end
+  
+  
+  test "Timeline has self tweets" do
+	preloaded = users(:preloaded)
+	preloaded.tweets.each do |self_tweet|
+		assert preloaded.timeline.include?(self_tweet)
+	end
+  end
+  
+  test "Timeline has followed tweets" do
+	bob = users(:bob)
+	preloaded = users(:preloaded)
+	preloaded.tweets.each do |followed_tweet|
+		assert bob.timeline.include?(followed_tweet)
+	end
+  end
+  
+  test "Timeline does not have unfollowed tweets" do
+	bob = users(:bob)
+	jeff = users(:jeff)
+	jeff.tweets.each do |unfollowed_tweet|
+		assert_not bob.timeline.include?(unfollowed_tweet)
+	end
+  end
 end
