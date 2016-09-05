@@ -45,11 +45,27 @@ class UserTest < ActiveSupport::TestCase
 	assert_not @user.valid?
   end
   
+  test "username valid format" do 
+	valid_usernames = %w[UserName user_name us3rname]
+	valid_usernames.each do |valid_username|
+		@user.username = valid_username
+		assert @user.valid?
+	end
+  end
+  
+  test "username invalid format" do
+	invalid_usernames = %w[userN@me "user name"]
+	invalid_usernames.each do |invalid_username|
+		@user.username = invalid_username
+		assert_not @user.valid?
+	end
+  end
+  
   test "email valid format" do
 	valid_emails = %w[fake@fake.com fak3.notreal@fake.Com f_ak-3.@fake.foo.com fake+3@gmail.com]
 	valid_emails.each do |valid_email|
 		@user.email = valid_email
-		assert @user.valid?, "#{valid_email.inspect} should be valid"
+		assert @user.valid?
 	end
   end
   
