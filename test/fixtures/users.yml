@@ -4,3 +4,7 @@ preloaded:
     email: preloaded@fake.com
     password_digest: <%= User.digest('P@ssWord') %>
 
+bob:
+    username: bob
+    email: bob@bob.com
+    password_digest: <%= User.digest('P@ssWord') %>

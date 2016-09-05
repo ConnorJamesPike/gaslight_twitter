@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+	has_many :tweets
 	before_save { self.email = email.downcase }
 	USERNAME_REGEX = /\A^*\w*$\z/
 	validates :username, presence: true, length: { maximum: 15}, format: { with: USERNAME_REGEX }, uniqueness: { case_sensitive: true}
@@ -8,6 +9,9 @@ class User < ApplicationRecord
 	has_secure_password
 	validates :password, presence: true, format: { with: PASSWORD_REGEX }, length: { minimum: 8, maximum: 16 }
 	
+	def timeline
+		Tweet.where("user_id = ?", id)
+	end
 	
 	def User.digest(string)
 		cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST : BCrypt::Engine.cost
