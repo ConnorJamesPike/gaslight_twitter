@@ -127,6 +127,17 @@ class UserTest < ActiveSupport::TestCase
 	assert_not preloaded.following?(bob)
   end
   
+  test "favorite and unfavorite" do 
+	preloaded = users(:preloaded)
+	tweet = tweets(:one)
+	assert_not preloaded.favorited?(tweet)
+	preloaded.favorite(tweet)
+	assert preloaded.favorited?(tweet)
+	assert tweet.favoriters.include?(preloaded)
+	preloaded.unfavorite(tweet)
+	assert_not preloaded.favorited?(tweet)
+  end
+  
   
   test "Timeline has self tweets" do
 	preloaded = users(:preloaded)
@@ -143,11 +154,18 @@ class UserTest < ActiveSupport::TestCase
 	end
   end
   
-  test "Timeline does not have unfollowed tweets" do
+  test "Timeline does not have unassociated tweets" do
 	bob = users(:bob)
 	jeff = users(:jeff)
 	jeff.tweets.each do |unfollowed_tweet|
 		assert_not bob.timeline.include?(unfollowed_tweet)
+	end
+  end
+  
+  test "Timeline has favorite tweets" do
+	preloaded = users(:preloaded)
+	preloaded.favorite_tweets.each do |favorite_tweet|
+		assert preloaded.timeline.include?(favorite_tweet)
 	end
   end
 end

@@ -2,6 +2,8 @@ class User < ApplicationRecord
 	has_many :tweets
 	has_many :active_follows, class_name: "Follow", foreign_key: "follower_id"
 	has_many :passive_follows, class_name: "Follow", foreign_key: "followed_id"
+	has_many :favorites
+	has_many :favorite_tweets, through: :favorites, source: :tweet
 	has_many :following, through: :active_follows, source: :followed
 	has_many :followers, through: :passive_follows, source: :follower
 	before_save { self.email = email.downcase }
@@ -15,7 +17,8 @@ class User < ApplicationRecord
 	
 	def timeline
 		following_user_ids = "SELECT followed_id FROM follows WHERE follower_id = :user_id"
-		Tweet.where("user_id IN (#{following_user_ids}) OR user_id = :user_id", user_id: id).distinct
+		favorite_tweet_ids = "SELECT tweet_id FROM favorites WHERE user_id = :user_id"
+		Tweet.where("user_id IN (#{following_user_ids}) OR id IN (#{favorite_tweet_ids}) OR user_id = :user_id", user_id: id).distinct
 	end
 	
 	def follow(following_user)
@@ -28,6 +31,18 @@ class User < ApplicationRecord
 	
 	def following?(following_user)
 		following.include?(following_user)
+	end
+	
+	def favorite(tweet)
+		favorites.create(tweet_id: tweet.id)
+	end
+	
+	def unfavorite(tweet)
+		favorites.find_by(tweet_id: tweet.id).destroy
+	end
+	
+	def favorited?(tweet)
+		favorite_tweets.include?(tweet)
 	end
 	
 	def User.digest(string)

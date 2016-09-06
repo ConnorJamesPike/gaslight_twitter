@@ -9,11 +9,16 @@ Rails.application.routes.draw do
 
   resources :users do
 	member do
-		get :following, :followers
+		get :following, :followers, :favorite_tweets
 	end
   end
-  resources :tweets, only: [:create, :destroy]
+  resources :tweets, only: [:create, :destroy] do
+	member do
+		get :favoriters
+	end
+  end
   resources :follows, only: [:create, :destroy]
+  resources :favorites, only: [:create, :destroy]
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

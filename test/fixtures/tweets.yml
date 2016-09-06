@@ -34,3 +34,8 @@ seven:
   content: "Im jeff"
   created_at: <%= 10.minutes.ago %>
   user: jeff
+  
+eight:
+  content: "I'm amy!"
+  created_at: <%= 10.minutes.ago %>
+  user: amy

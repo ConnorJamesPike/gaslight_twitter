@@ -13,3 +13,8 @@ jeff:
     username: jeff
     email: jeff@bob.com
     password_digest: <%= User.digest('P@ssWord') %>
+    
+amy:
+    username: amy
+    email: amy@fake.com
+    password_digest: <%= User.digest('P@ssWord') %>
